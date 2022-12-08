@@ -1,0 +1,26 @@
+#!/bin/sh
+set -e
+if [ -z "$SYSROOT" ]; then export SYSROOT="$(realpath "$(dirname "$0")/../sysroot")"; fi
+if [ -z "$LLVMDIR" ]; then export LLVMDIR="$(realpath "$(dirname "$0")/../llvm-project")"; fi
+
+rm -rf build-
+mkdir build-
+cd build-
+export CFLAGS="-mcmodel=large -mstack-protector-guard=global -no-pie -fno-pic -fno-pie"
+export CXXFLAGS="-mcmodel=large -mstack-protector-guard=global -no-pie -fno-pic -fno-pie"
+cmake \
+	-DCMAKE_C_COMPILER="$SYSROOT/bin/musl-gcc" \
+	-DCMAKE_CXX_COMPILER="$SYSROOT/bin/musl-gcc" \
+	-DCOMPILER_RT_BUILD_CRT=OFF \
+	-DCOMPILER_RT_BUILD_SANITIZERS=OFF \
+	-DCOMPILER_RT_BUILD_XRAY=OFF \
+	-DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
+	-DCOMPILER_RT_BUILD_PROFILE=OFF \
+	-DCOMPILER_RT_CAN_EXECUTE_TESTS=OFF \
+	-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON \
+	-UCOMPILER_RT_BAREMETAL_BUILD \
+	-DCOMPILER_RT_BAREMETAL_BUILD=ON \
+	-DCMAKE_INSTALL_PREFIX="$SYSROOT" \
+	-DCMAKE_AR="/usr/bin/gcc-ar" \
+	-DCMAKE_RANLIB="/usr/bin/gcc-ranlib" \
+	$LLVMDIR/compiler-rt

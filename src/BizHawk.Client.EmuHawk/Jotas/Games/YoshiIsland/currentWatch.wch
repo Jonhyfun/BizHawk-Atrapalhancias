@@ -1,0 +1,26 @@
+﻿SystemID SNES
+FFFF	w	u	0	CARTRAM	cartram
+000379	b	h	0	WRAM	lives
+000035	b	h	0	WRAM	currentKey
+000036	b	h	0	WRAM	currentArrow
+00B4	b	h	0	CARTRAM	xVelocity
+0	S	_	1		
+0154	b	h	0	CARTRAM	tamanho da lingua
+0152	b	h	0	CARTRAM	tamanho da lingua
+0	S	_	1		
+1E28	b	h	0	CARTRAM	
+0	S	_	1		
+00AC	b	h	0	CARTRAM	0e = morte
+0	S	_	1		
+00AE	b	h	0	CARTRAM	FORM
+0	S	_	1		
+01D6	w	h	0	CARTRAM	yoshiHitState
+0	S	_	1		
+000372	b	h	0	WRAM	babyFlag
+000D0F	b	h	0	WRAM	hasMessage
+000D0F	b	h	0	WRAM	hasMessage
+0	S	_	1		
+0003B6	b	h	0	WRAM	babyHp
+0357	w	u	0	CARTRAM	
+00B2	b	h	0	CARTRAM	Y
+00B0	b	h	0	CARTRAM	X

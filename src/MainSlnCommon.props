@@ -1,0 +1,19 @@
+<Project>
+	<Import Project="../Common.props" />
+	<PropertyGroup>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DefineConstants>$(DefineConstants);AVI_SUPPORT</DefineConstants>
+		<DocumentationFile>$(ProjectDir)bin/doc_comments.xml</DocumentationFile>
+		<LangVersion>9.0</LangVersion>
+		<MSBuildWarningsAsMessages>NU1702</MSBuildWarningsAsMessages>
+		<NoWarn>CS1573;CS1591</NoWarn>
+		<OutputPath>$(ProjectDir)../../output/dll</OutputPath>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+	</PropertyGroup>
+	<ItemGroup>
+		<Analyzer Include="$(ProjectDir)../../References/BizHawk.SrcGen.ReflectionCache.dll" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(Configuration)' != 'Debug' ">
+		<Compile Remove="$(ProjectDir)debug/**/*" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,5 @@
+﻿SystemID N64
+15B16B	w	h	1	RDRAM	buga bola
+15B0E6	w	h	1	RDRAM	X
+15B0EA	w	h	1	RDRAM	Y
+115B0E	w	h	1	RDRAM	Z

@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+if [ -z "$SYSROOT" ]; then export SYSROOT="$(realpath "$(dirname "$0")/../sysroot")"; fi
+if [ -z "$LLVMDIR" ]; then export LLVMDIR="$(realpath "$(dirname "$0")/../llvm-project")"; fi
+
+rm -rf build0
+mkdir build0
+cd build0
+export CFLAGS="-mcmodel=large -mstack-protector-guard=global -fno-use-cxa-atexit -no-pie -fno-pic -fno-pie -D_LIBUNWIND_IS_BAREMETAL -D_LIBUNWIND_SUPPORT_DWARF_UNWIND"
+export CXXFLAGS="-mcmodel=large -mstack-protector-guard=global -fno-use-cxa-atexit -no-pie -fno-pic -fno-pie -D_LIBUNWIND_IS_BAREMETAL -D_LIBUNWIND_SUPPORT_DWARF_UNWIND"
+cmake \
+	-DCMAKE_C_COMPILER="$SYSROOT/bin/musl-gcc" \
+	-DCMAKE_CXX_COMPILER="$SYSROOT/bin/musl-gcc" \
+	-DLIBUNWIND_ENABLE_SHARED=OFF \
+	-DLIBUNWIND_USE_COMPILER_RT=ON \
+	-DCMAKE_INSTALL_PREFIX="$SYSROOT" \
+	-DCMAKE_AR="/usr/bin/gcc-ar" \
+	-DCMAKE_RANLIB="/usr/bin/gcc-ranlib" \
+	$LLVMDIR/libunwind
