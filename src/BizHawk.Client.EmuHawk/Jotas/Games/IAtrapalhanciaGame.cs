@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BizHawk.Client.EmuHawk.Jotas.Games
 {
@@ -10,5 +6,7 @@ namespace BizHawk.Client.EmuHawk.Jotas.Games
 	{
 		public string Watch { get; }
 		public void OnLoad();
-	}
+		public void UpdateHook(string note, byte value, int previous, Action<string> Poke);
+
+    }
 }

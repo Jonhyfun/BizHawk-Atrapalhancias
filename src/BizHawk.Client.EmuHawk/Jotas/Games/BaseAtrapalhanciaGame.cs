@@ -17,5 +17,7 @@ namespace BizHawk.Client.EmuHawk.Jotas.Games
 			Lua = (LuaConsole)MainForm.Instance.Tools.Get<LuaConsole>(); //todo JOTAS tirar essa gambiarra e a do ramwatch
 			Lua.WindowState = System.Windows.Forms.FormWindowState.Minimized;
 		}
+
+		public abstract void UpdateHook(string note, byte value, int previous, Action<string> Poke);
 	}
 }

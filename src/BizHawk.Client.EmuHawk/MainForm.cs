@@ -4911,10 +4911,11 @@ namespace BizHawk.Client.EmuHawk
 
 		}
 
-		private Dictionary<string,Action<dynamic?>> currentAtrapalhancias = AtrapalhanciaBuilder.ExposeAtrapalhancias(currentGame);
+		private Dictionary<string,Action<dynamic>> currentAtrapalhancias = AtrapalhanciaBuilder.ExposeAtrapalhancias(currentGame);
 		private void OnGameLoaded()
 		{
 			atrapalhanciaGame.OnLoad();
+			ByteWatch.UpdateHook = atrapalhanciaGame.UpdateHook;
 			ByteWatch.MainForm = this;
 			if (server != null)
 			{
@@ -4957,7 +4958,7 @@ namespace BizHawk.Client.EmuHawk
 						atrapalhancia.Value(null);
 					}));
 				};
-				this.MainMenuStrip.Items.Add(item);
+				MainMenuStrip.Items.Add(item);
 			}
 		}
 	}

@@ -94,11 +94,11 @@ namespace BizHawk.Client.Common
 			}
 		}
 
+
+		public static Action<string, byte, int, Action<string>> UpdateHook = (notes, value, previous, Poke) => { };
+
 		public static dynamic MainForm = null;
 
-		public static int X = 0;
-		public static int Y = 0;
-		
 		/// <summary>
 		/// Update the Watch (read it from <see cref="MemoryDomain"/>
 		/// </summary>
@@ -124,44 +124,7 @@ namespace BizHawk.Client.Common
 
 					if (_value != Previous)
 					{
-						if (this.Notes.ToLower() == "babyhp")
-						{
-							if (_value > 17) Poke("10");
-						}
-
-						if (this.Notes == "X")
-						{
-							X = int.Parse(_value.ToString());
-						}
-
-						if(this.Notes == "Y")
-						{
-							Y = int.Parse(_value.ToString());
-						}
-
-						if (this.Notes.ToLower() == "lives")
-						{
-							if(Previous != 0 && _value < Previous)
-							{
-								var value = int.Parse(_value.ToString());
-								if (value == 2)
-								{
-									Console.WriteLine(MainForm.Player + " morreu");
-									var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "died", MainForm.Player } });
-									try
-									{
-										HttpCommunication._client.PostAsync("http://localhost:8000/fromSnes", content);
-										_value = 3;
-										this.Poke("03");
-									}
-									catch
-									{
-								
-									}
-								}
-							}
-						}
-
+						UpdateHook(this.Notes, _value, Previous, (value) => Poke(value));
 						ChangeCount++;
 					}
 

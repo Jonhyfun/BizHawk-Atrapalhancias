@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -100,6 +101,11 @@ namespace BizHawk.Client.EmuHawk.Jotas.Games.MarioTennis
 			} 
 
 			return Task.CompletedTask;
+		}
+
+		public override void UpdateHook(string note, byte value, int previous, Action<string> Poke)
+		{
+			
 		}
 	}
 }

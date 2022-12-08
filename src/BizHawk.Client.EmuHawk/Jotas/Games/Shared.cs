@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using static BizHawk.Client.EmuHawk.Jotas.Games.BaseAtrapalhanciaGame;
 
 namespace BizHawk.Client.EmuHawk.Jotas.Games
 {
@@ -55,6 +52,11 @@ namespace BizHawk.Client.EmuHawk.Jotas.Games
 
 			return Task.CompletedTask;
 
+		}
+
+		public override void UpdateHook(string note, byte value, int previous, Action<string> Poke)
+		{
+			
 		}
 	}
 }

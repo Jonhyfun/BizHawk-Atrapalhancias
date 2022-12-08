@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.Jotas.Utils;
 using BizHawk.Emulation.Cores.Nintendo.SNES9X;
 
@@ -198,6 +200,36 @@ namespace BizHawk.Client.EmuHawk.Jotas.Games.YoshiIsland
 			return Task.CompletedTask;
 		}
 
-		
+		public override void UpdateHook(string note, byte value, int previous, Action<string> Poke)
+		{
+            if (note.ToLower() == "babyhp")
+            {
+                if (value > 17) Poke("10");
+            }
+
+            if (note.ToLower() == "lives")
+            {
+                if (previous != 0 && value < previous)
+                {
+                    var _value = int.Parse(value.ToString());
+                    if (
+						_value == 2)
+                    {
+                        Console.WriteLine(MainForm.Instance.Player + " morreu");
+                        var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "died", MainForm.Instance.Player } });
+                        try
+                        {
+                            HttpCommunication._client.PostAsync("http://localhost:8000/fromSnes", content);
+                            value = 3;
+                            Poke("03");
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                }
+            }
+        }
 	}
 }
