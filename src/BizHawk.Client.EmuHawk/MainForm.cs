@@ -47,10 +47,11 @@ using BizHawk.Client.EmuHawk.CoreExtensions;
 using BizHawk.Client.EmuHawk.CustomControls;
 using BizHawk.Common.CollectionExtensions;
 using BizHawk.WinForms.Controls;
-using BizHawk.Client.EmuHawk.Jotas.Games.YoshiIsland;
 using BizHawk.Client.EmuHawk.Jotas.Utils;
 using BizHawk.Client.EmuHawk.Jotas.Games;
-using BizHawk.Client.EmuHawk.Jotas.Games.MarioTennis;
+using BizHawk.Client.EmuHawk.Jotas.Games.DKC3;
+using BizHawk.Client.EmuHawk.Jotas.Games.YoshiIsland;
+using BizHawk.Client.EmuHawk.Jotas.Games.Metroid;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -2232,6 +2233,8 @@ namespace BizHawk.Client.EmuHawk
 		}
 
 		public static bool ForceRewind = false;
+		public static bool ForceTurbo = false;
+
 		private void SyncThrottle()
 		{
 			// "unthrottled" = throttle was turned off with "Toggle Throttle" hotkey
@@ -2242,7 +2245,7 @@ namespace BizHawk.Client.EmuHawk
 			// method is selected, but the clock throttle determines that by itself and
 			// everything appears normal here.
 			var rewind = ForceRewind  || (Rewinder?.Active == true && (InputManager.ClientControls["Rewind"] || PressRewind));
-			var fastForward = InputManager.ClientControls["Fast Forward"] || FastForward;
+			var fastForward = ForceTurbo || InputManager.ClientControls["Fast Forward"] || FastForward;
 			var turbo = IsTurboing;
 
 			int speedPercent = fastForward ? Config.SpeedPercentAlternate : Config.SpeedPercent;
@@ -4889,7 +4892,7 @@ namespace BizHawk.Client.EmuHawk
 		private Thread server;
 		private HttpListener listener;
 
-		private static Type currentGame = typeof(YoshiIsland); //todo JOTAS jogar isso numa bag?
+		private static Type currentGame = typeof(Metroid); //todo JOTAS jogar isso numa bag?
 
 		public static MainForm Instance;
 
@@ -4919,7 +4922,10 @@ namespace BizHawk.Client.EmuHawk
 			ByteWatch.MainForm = this;
 			if (server != null)
 			{
-				listener.Stop();
+				if(listener.IsListening)
+				{
+					listener.Stop();
+				}
 				server.Interrupt();
 				server = null;
 			}

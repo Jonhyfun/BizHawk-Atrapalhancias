@@ -693,8 +693,13 @@ namespace BizHawk.Bizware.DirectX
 		public void LoadTextureData(Texture2d tex, BitmapBuffer bmp)
 		{
 			sdi.BitmapData bmpData = bmp.LockBits();
+
+			if (bmpData == null) return;
+
+
 			var tw = tex.Opaque as TextureWrapper;
 			var dr = tw.Texture.LockRectangle(0, LockFlags.None);
+
 
 			// TODO - do we need to handle odd sizes, weird pitches here?
 			if (bmp.Width * 4 != bmpData.Stride)

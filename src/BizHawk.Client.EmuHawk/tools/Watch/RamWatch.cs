@@ -1250,7 +1250,7 @@ namespace BizHawk.Client.EmuHawk
 			return () => MainThreadInvoker(() => MainForm.CheatList.Remove(cheat));
 		}
 
-		public void Poke(string note, string value)
+        public void Poke(string note, string value)
 		{
 			var watch = Watches.First(w => w.Notes.ToLower() == note.ToLower());
 			MainThreadInvoker(() => watch.Poke(value));

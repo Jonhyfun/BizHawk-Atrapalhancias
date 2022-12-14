@@ -49,6 +49,12 @@
 	<ItemGroup>
 		<Compile Update="ArchiveChooser.cs" SubType="Form" />
 		<Compile Update="ArchiveChooser.Designer.cs" DependentUpon="ArchiveChooser.cs" />
+		<Compile Update="Jotas\Games\DKC3\DKC3.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+		<Compile Update="Jotas\Games\Metroid\Metroid.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
 		<EmbeddedResource Update="ArchiveChooser.resx" DependentUpon="ArchiveChooser.cs" SubType="Designer" />
 		<Compile Update="AVOut/FFmpegWriterForm.cs" SubType="Form" />
 		<Compile Update="AVOut/FFmpegWriterForm.Designer.cs" DependentUpon="FFmpegWriterForm.cs" />
@@ -517,7 +523,16 @@
 		<Compile Update="UpdateChecker.cs" SubType="Code" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Update="board.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Jotas\Games\DKC3\currentWatch.wch">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Jotas\Games\MarioTennis\currentWatch.wch">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Jotas\Games\Metroid\currentWatch.wch">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Jotas\Games\YoshiIsland\currentWatch.wch">

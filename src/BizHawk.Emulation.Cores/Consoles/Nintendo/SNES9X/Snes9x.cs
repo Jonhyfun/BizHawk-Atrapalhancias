@@ -179,7 +179,17 @@ namespace BizHawk.Emulation.Cores.Nintendo.SNES9X
 			return () => { };
 		}
 
-		public static string GetRandomJoyButton()
+        public static Action FreezeUnButton(string button)
+        {
+            if (Joypad.JotasUnPressedJoyButtons.ContainsKey(button))
+            {
+                Joypad.JotasUnPressedJoyButtons[button] = true;
+                return () => Joypad.JotasUnPressedJoyButtons[button] = false;
+            }
+            return () => { };
+        }
+
+        public static string GetRandomJoyButton()
 		{
 			return Joypad.Buttons[rng.Next(0, Joypad.Buttons.Length - 1)];
 		}
@@ -273,7 +283,27 @@ namespace BizHawk.Emulation.Cores.Nintendo.SNES9X
 				["0R"] = false
 			};
 
-			private static readonly ControllerDefinition _definition = new("(SNES Controller fragment)")
+            public static Dictionary<string, bool> JotasUnPressedJoyButtons = new Dictionary<string, bool>
+            {
+                ["0Up"] = false,
+                ["0Down"] = false,
+                ["0Left"] = false,
+                ["0Right"] = false,
+
+                ["0Select"] = false,
+                ["0Start"] = false,
+
+                ["0Y"] = false,
+                ["0B"] = false,
+
+                ["0X"] = false,
+                ["0A"] = false,
+
+                ["0L"] = false,
+                ["0R"] = false
+            };
+
+            private static readonly ControllerDefinition _definition = new("(SNES Controller fragment)")
 			{
 				BoolButtons = Buttons.OrderBy(ButtonOrder).ToList()
 			};
@@ -283,7 +313,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.SNES9X
 			public void ApplyState(IController controller, short[] input, int offset)
 			{
 				for (int i = 0; i < Buttons.Length; i++)
-					input[offset + i] = (short)((JotasPressedJoyButtons[Buttons[i]] || controller.IsPressed(Buttons[i])) ? 1 : 0);
+					input[offset + i] = (short)((JotasPressedJoyButtons[Buttons[i]] || (JotasUnPressedJoyButtons[Buttons[i]] == true ? false : controller.IsPressed(Buttons[i]))) ? 1 : 0);
 			}
 		}
 

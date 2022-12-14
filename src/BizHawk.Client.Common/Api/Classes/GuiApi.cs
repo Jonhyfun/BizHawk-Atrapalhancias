@@ -344,21 +344,28 @@ namespace BizHawk.Client.Common
 				LogCallback($"File not found: {path}");
 				return;
 			}
-			using var g = GetGraphics(surfaceID);
-			var isCached = _imageCache.ContainsKey(path);
-			var img = isCached ? _imageCache[path] : Image.FromFile(path);
-			if (!isCached && cache) _imageCache[path] = img;
-			g.CompositingMode = _compositingMode;
-			g.DrawImage(
-				img,
-				new Rectangle(x, y, width ?? img.Width, height ?? img.Height),
-				0,
-				0,
-				img.Width,
-				img.Height,
-				GraphicsUnit.Pixel,
-				_attributes
-			);
+			try
+			{
+				using var g = GetGraphics(surfaceID);
+				var isCached = _imageCache.ContainsKey(path);
+				var img = isCached ? _imageCache[path] : Image.FromFile(path);
+				if (!isCached && cache) _imageCache[path] = img;
+				g.CompositingMode = _compositingMode;
+				g.DrawImage(
+					img,
+					new Rectangle(x, y, width ?? img.Width, height ?? img.Height),
+					0,
+					0,
+					img.Width,
+					img.Height,
+					GraphicsUnit.Pixel,
+					_attributes
+				);
+			}
+			catch
+			{
+
+			}
 		}
 
 		public void ClearImageCache()

@@ -43,7 +43,14 @@ namespace BizHawk.Bizware.BizwareGL
 
 			if (WrappedBitmap != null)
 			{
-				CurrLock = WrappedBitmap.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+				try 
+				{ 
+					CurrLock = WrappedBitmap.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+				}
+				catch
+				{
+
+				}
 				return CurrLock;
 			}
 
@@ -359,16 +366,23 @@ namespace BizHawk.Bizware.BizwareGL
 				}
 				else
 				{
-					//dump the supplied bitmap into our pixels array
-					int width = bmp.Width;
-					int height = bmp.Height;
-					InitSize(width, height);
-					BitmapData bmpdata = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-					int* ptr = (int*)bmpdata.Scan0;
-					int stride = bmpdata.Stride / 4;
-					LoadFrom(width, stride, height, (byte*)ptr, options);
-					bmp.UnlockBits(bmpdata);
-					needsPad = false;
+					try
+					{
+						//dump the supplied bitmap into our pixels array
+						int width = bmp.Width;
+						int height = bmp.Height;
+						InitSize(width, height);
+						BitmapData bmpdata = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+						int* ptr = (int*)bmpdata.Scan0;
+						int stride = bmpdata.Stride / 4;
+						LoadFrom(width, stride, height, (byte*)ptr, options);
+						bmp.UnlockBits(bmpdata);
+						needsPad = false;
+					}
+					catch
+					{
+
+					}
 				}
 			}
 

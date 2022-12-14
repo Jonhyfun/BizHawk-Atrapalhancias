@@ -323,7 +323,14 @@ namespace BizHawk.Client.EmuHawk
 		public void ExecuteString(string command)
 		{
 			_currThread = _lua.NewThread();
-			_currThread.DoString(command);
+			try
+			{
+				_currThread.DoString(command);
+			}
+			catch
+			{
+
+			}
 			if (true /*NLua.Lua.WhichLua == "NLua"*/) _lua.Pop();
 		}
 

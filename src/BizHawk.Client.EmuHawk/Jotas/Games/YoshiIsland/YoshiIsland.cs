@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using BizHawk.Client.Common;
@@ -138,17 +139,88 @@ namespace BizHawk.Client.EmuHawk.Jotas.Games.YoshiIsland
 			RamWatch.ram.Poke("babyHp", "01");
 		}
 
-		public static Task HitYoshi(string word)
+        private static Task MessageBox(string word)
+        {
+            var width = 218;
+            var height = 114;
+
+            //word = "=AAAAAAAAAA ABACATE ACANATER";
+
+            var textList = new List<char>();
+            var textArray = HttpUtility.UrlDecode(word.Split('=')[1].Replace("+", " ").Replace("\n", " ")).ToCharArray();
+
+            for (int i = 0; i < textArray.Length; i++)
+            {
+                if (i == 1)
+                {
+                    textList.Add(textArray[i]);
+                    continue;
+                }
+                if ((i % 25) == 1)
+                {
+                    textList.Add('\\');
+                    textList.Add('n');
+                }
+                textList.Add(textArray[i]);
+
+            }
+
+            var text = new string(textList.ToArray()).Replace('\'', ' ').Replace("\n", " ");
+
+			var drawMessageBox = true;
+
+            new Thread(() =>
+            {
+                Lua.RunLuaAction($"gui.clearGraphics()");
+                while (drawMessageBox)
+                {
+                    Lua.RunLuaAction($"gui.drawImage('board.png', (client.bufferwidth() / 2) - {Math.Round(width * 0.50)}, (client.bufferheight() / 2) - {Math.Round(height * 0.50)}, {width}, {height})");
+					var x = $"gui.drawText((client.bufferwidth()/2)-{Math.Round(width * 0.50) - Math.Round(width * 0.06)}, (client.bufferheight()/2)-{Math.Round(height * 0.47) - Math.Round(height * 0.06)}, '{text}')";
+
+					Lua.RunLuaAction($"gui.drawText((client.bufferwidth()/2)-{Math.Round(width * 0.50) - Math.Round(width * 0.06)}, (client.bufferheight()/2)-{Math.Round(height * 0.47) - Math.Round(height * 0.06)}, '{text}')");
+                    Thread.Sleep(150);
+                }
+            }).Start();
+
+            var time = text.Length / 2 * 100;
+
+            time = time < 4000 ? 4000 : time;
+
+            Task.Delay(time).Wait();
+
+			drawMessageBox = false;
+			Task.Delay(300);
+
+            Lua.RunLuaAction($"gui.clearGraphics()");
+
+            Task.Delay(550).Wait();
+
+            return Task.CompletedTask;
+
+        }
+
+        public static Task Map()
+        {
+            var unfreeze = Snes9x.FreezeButton("0Start");
+            Task.Delay(300).Wait();
+            unfreeze();
+
+            unfreeze = Snes9x.FreezeButton("0Select");
+            Task.Delay(300).Wait();
+            unfreeze();
+
+            return Task.CompletedTask;
+        }
+
+        public static Task HitYoshi(string word)
 		{
 			RamWatch.ram.Poke("yoshiHitState", "A0");
 
 			Task.Delay(350).Wait();
 
-			word = "=ABAAAAAAAAAAAAAAAAAAAAAAAAAACATE";
-
 			if (word != null)
 			{
-				Shared.MessageBox(word).Wait();
+				MessageBox(word).Wait();
 			}
 
 			return Task.CompletedTask;
@@ -182,25 +254,7 @@ namespace BizHawk.Client.EmuHawk.Jotas.Games.YoshiIsland
 			return Task.CompletedTask;
 		}
 
-		public static Task Rewind()
-		{
-			MainForm.ForceRewind = true;
-			Task.Delay(5000).Wait();
-			MainForm.ForceRewind = false;
-
-			return Task.CompletedTask;
-		}
-
-		public static Task BlackScreen() 
-		{
-			Lua.RunLuaAction("gui.drawBox(0,0,client.bufferwidth(),client.bufferheight(), 'black', 'black')");
-			Task.Delay(5000).Wait();
-			Lua.RunLuaAction("gui.drawBox(0,0,0,0, 'black', 'black')");
-
-			return Task.CompletedTask;
-		}
-
-		public override void UpdateHook(string note, byte value, int previous, Action<string> Poke)
+        public override void UpdateHook(string note, byte value, int previous, Action<string> Poke)
 		{
             if (note.ToLower() == "babyhp")
             {

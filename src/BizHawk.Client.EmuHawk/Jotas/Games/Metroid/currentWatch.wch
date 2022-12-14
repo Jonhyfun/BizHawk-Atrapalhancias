@@ -1,0 +1,9 @@
+﻿SysteSystemID SNES
+0009C2	b	s	0	WRAM	vida
+000A1E	b	h	0	WRAM	direction
+000CCC	b	h	0	WRAM	cooldown
+0	S	_	1		
+00008B	b	h	0	WRAM	bugarPulo
+0	S	_	1
+0	S	_	1
+000B46	w	h	0	WRAM	moveSpeed

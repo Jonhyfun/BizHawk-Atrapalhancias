@@ -46,7 +46,14 @@ namespace BizHawk.Client.Common
 
 			if (copy)
 			{
-				_bmpData = _bmp.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+				try
+				{
+					_bmpData = _bmp.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+				}
+				catch
+				{
+
+				}
 
 				int w = Width;
 				int h = Height;
